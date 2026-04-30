@@ -79,7 +79,7 @@
 
                         {{-- Layer 3: Final Generated Result --}}
                         <img id="final-avatar-preview" class="absolute inset-0 w-full h-full z-20 hidden"
-                            alt="Final Avatar">
+                            alt="">
                     </div>
 
                     {{-- Zoom Control --}}
@@ -183,6 +183,9 @@
                         </li>
                         <li class="flex items-start gap-2">
                             <span style="color:#C9A84C;margin-top:1px;">✓</span> Use the slider to zoom in or out.
+                        </li>
+                         <li class="flex items-start gap-2">
+                            <span style="color:#C9A84C;margin-top:1px;">✓</span> JPG or PNG format, under 5MB.
                         </li>
                     </ul>
                 </div>
