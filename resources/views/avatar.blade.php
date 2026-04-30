@@ -4,21 +4,12 @@
 
 @section('content')
 
-    {{--
-  FIXES NOTE:
-  To make generation work, ensure you have this in your layouts.app <head>:
-  <meta name="csrf-token" content="{{ csrf_token() }}">
---}}
-
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div
-            style="position:absolute;top:-120px;right:-120px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,190,0.12) 0%,transparent 70%);">
+        <div style="position:absolute;top:-120px;right:-120px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,190,0.12) 0%,transparent 70%);">
         </div>
-        <div
-            style="position:absolute;bottom:-80px;left:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.1) 0%,transparent 70%);">
+        <div style="position:absolute;bottom:-80px;left:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.1) 0%,transparent 70%);">
         </div>
-        <div
-            style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(75,0,130,0.04) 1px,transparent 1px);background-size:32px 32px;">
+        <div style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(75,0,130,0.04) 1px,transparent 1px);background-size:32px 32px;">
         </div>
     </div>
 
@@ -38,7 +29,6 @@
                 </div>
             </div>
 
-            {{-- Success message --}}
             <div class="text-center mb-2">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-4"
                     style="background:rgba(0,180,100,0.1);color:#00803a;border:1px solid rgba(0,180,100,0.25);">
@@ -57,34 +47,33 @@
             </div>
         </header>
 
-        {{-- Main content: preview + upload side by side on desktop --}}
-        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start fade-in delay-1">
+        {{-- Main content: centered on desktop --}}
+        <div class="w-full max-w-2xl grid grid-cols-1 gap-8 items-start fade-in delay-1">
 
-            {{-- ── LEFT: Avatar Preview ── --}}
+            {{-- ── Avatar Preview ── --}}
             <div class="flex flex-col items-center">
                 <div class="w-full max-w-sm">
                     <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 text-center">Preview</h3>
 
-                    {{-- The frame canvas: Now using the static PNG as the structure --}}
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-white aspect-square">
 
-                        {{-- Layer 1: The User's Uploaded Photo (Positioned behind the frame) --}}
+                        {{-- Layer 1: User photo behind frame --}}
                         <div class="absolute inset-0 flex items-center justify-center pointer-events-none"
                             style="z-index: 1;">
                             <img id="user-photo-preview" class="hidden object-cover rounded-full"
                                 style="width: 53%; aspect-ratio: 1; transform: translateY(-7%);" alt="User photo">
                         </div>
 
-                        {{-- Layer 2: The Actual Frame Image (10.png) --}}
-                        <img id="frame-overlay" src="/images/10.png" class="relative w-full h-full z-10 pointer-events-none"
+                        {{-- Layer 2: Frame image --}}
+                        <img id="frame-overlay" src="/images/10.png"
+                            class="relative w-full h-full z-10 pointer-events-none"
                             alt="Campaign Frame">
 
-                        {{-- Layer 3: Final Generated Result (Shown only after server generation) --}}
-                        <img id="final-avatar-preview" class="absolute inset-0 w-full h-full z-20 hidden"
-                            alt="Final Avatar">
+                        {{-- Layer 3: Final generated result --}}
+                    
                     </div>
 
-                    {{-- Download button (shown after upload) --}}
+                    {{-- Download button --}}
                     <div id="download-section" class="hidden mt-5">
                         <a id="download-btn" href="{{ route('avatar.download', $registration->id) }}"
                             class="btn-gold w-full flex items-center justify-center gap-2 text-center">
@@ -99,55 +88,9 @@
                 </div>
             </div>
 
-            {{-- ── RIGHT: Upload card ── --}}
+            {{-- ── Upload card ── --}}
             <div class="flex flex-col gap-6">
 
-                {{-- Registration summary --}}
-                <div class="bg-white rounded-2xl p-6 shadow-lg" style="box-shadow:0 8px 30px rgba(75,0,130,0.08);">
-                    <h3 class="font-display font-bold text-lg mb-4" style="color:#2D0050;">Your Registration Details</h3>
-                    <div class="space-y-3">
-                        @foreach ([['icon' => 'user', 'label' => 'Full Name', 'value' => $registration->title . ' ' . $registration->full_name], ['icon' => 'phone', 'label' => 'Phone', 'value' => $registration->phone_number], ['icon' => 'cell', 'label' => 'Cell', 'value' => $registration->cell], ['icon' => 'church', 'label' => 'Church', 'value' => $registration->church], ['icon' => 'group', 'label' => 'Group', 'value' => $registration->group], ['icon' => 'souls', 'label' => 'Souls Committed', 'value' => $registration->souls_commitment . ' soul(s)']] as $detail)
-                            <div class="flex items-center gap-3 py-2 border-b last:border-0"
-                                style="border-color:rgba(75,0,130,0.06);">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                                    style="background:rgba(75,0,130,0.07);">
-                                    @if ($detail['icon'] === 'user')
-                                        <svg class="w-4 h-4" style="color:#7B2FBE;" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="1.8">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0" />
-                                        </svg>
-                                    @elseif($detail['icon'] === 'phone')
-                                        <svg class="w-4 h-4" style="color:#7B2FBE;" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="1.8">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                                        </svg>
-                                    @elseif($detail['icon'] === 'souls')
-                                        <svg class="w-4 h-4" style="color:#C9A84C;" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="1.8">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
-                                        </svg>
-                                    @else
-                                        <svg class="w-4 h-4" style="color:#7B2FBE;" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="1.8">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584" />
-                                        </svg>
-                                    @endif
-                                </div>
-                                <div class="min-w-0">
-                                    <p class="text-xs text-gray-400 leading-none mb-0.5">{{ $detail['label'] }}</p>
-                                    <p class="text-sm font-semibold truncate" style="color:#1a1a2e;">
-                                        {{ $detail['value'] }}</p>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                {{-- Upload card --}}
                 <div class="bg-white rounded-2xl shadow-lg overflow-hidden"
                     style="box-shadow:0 8px 30px rgba(75,0,130,0.08);">
                     <div class="h-1"
@@ -174,13 +117,11 @@
                                             d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                                     </svg>
                                 </div>
-                                <p class="font-semibold text-base mb-1" style="color:#2D0050;">Click to upload your photo
-                                </p>
+                                <p class="font-semibold text-base mb-1" style="color:#2D0050;">Click to upload your photo</p>
                                 <p class="text-sm text-gray-400">or drag and drop here</p>
                                 <p class="text-xs text-gray-300 mt-2">JPG or PNG, max 5MB</p>
                             </div>
 
-                            {{-- Selected file name --}}
                             <div id="file-selected" class="hidden">
                                 <div class="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
                                     style="background:rgba(0,180,100,0.1);">
@@ -190,8 +131,7 @@
                                             d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
-                                <p class="font-semibold text-sm" style="color:#00803a;" id="file-name-display">Photo
-                                    selected</p>
+                                <p class="font-semibold text-sm" style="color:#00803a;" id="file-name-display">Photo selected</p>
                                 <p class="text-xs text-gray-400 mt-1">Click to change</p>
                             </div>
                         </div>
@@ -204,8 +144,7 @@
                         <button id="upload-btn" onclick="uploadAvatar()" disabled
                             class="btn-gold w-full mt-5 flex items-center justify-center gap-2 opacity-40 cursor-not-allowed transition-all"
                             style="pointer-events:none;">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                stroke-width="2">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                             </svg>
@@ -256,7 +195,6 @@
             const registrationId = {{ $registration->id }};
             let selectedFile = null;
 
-            // Drag and drop
             const dropZone = document.getElementById('drop-zone');
             dropZone.addEventListener('dragover', e => {
                 e.preventDefault();
@@ -293,23 +231,19 @@
                 selectedFile = file;
                 hideError();
 
-                // Update UI state
                 document.getElementById('drop-content').classList.add('hidden');
                 document.getElementById('file-selected').classList.remove('hidden');
                 document.getElementById('file-name-display').textContent = file.name;
 
-                // Show photo behind the frame for immediate feedback
                 const reader = new FileReader();
                 reader.onload = e => {
                     const userPhoto = document.getElementById('user-photo-preview');
                     userPhoto.src = e.target.result;
                     userPhoto.classList.remove('hidden');
-                    // Hide final preview if user changes photo
                     document.getElementById('final-avatar-preview').classList.add('hidden');
                 };
                 reader.readAsDataURL(file);
 
-                // Enable upload button
                 const btn = document.getElementById('upload-btn');
                 btn.disabled = false;
                 btn.style.opacity = '1';
@@ -342,7 +276,6 @@
                 progressBar.classList.remove('hidden');
                 hideError();
 
-                // Animate progress bar locally
                 let pct = 0;
                 const interval = setInterval(() => {
                     pct = Math.min(pct + Math.random() * 15, 85);
@@ -357,7 +290,6 @@
                 if (csrfTokenMeta) {
                     formData.append('_token', csrfTokenMeta.content);
                 } else {
-                    console.error('CSRF token meta tag not found.');
                     clearInterval(interval);
                     showError('Configuration error (CSRF missing).');
                     resetBtn();
@@ -370,7 +302,7 @@
                         body: formData,
                         headers: {
                             'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest', // ← add this
+                            'X-Requested-With': 'XMLHttpRequest',
                         }
                     });
                     clearInterval(interval);
@@ -380,7 +312,6 @@
                     const data = await response.json();
 
                     if (data.success) {
-                        // Show the final merged image from server on top
                         const finalImg = document.getElementById('final-avatar-preview');
                         finalImg.src = data.image_url + '?t=' + Date.now();
                         finalImg.classList.remove('hidden');
@@ -402,7 +333,6 @@
                         resetBtn();
                     }
                 } catch (err) {
-                    console.error('Upload error:', err);
                     clearInterval(interval);
                     showError('Connection error or server crash.');
                     resetBtn();

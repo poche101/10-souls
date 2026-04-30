@@ -220,11 +220,6 @@
                             <div class="p-5 rounded-2xl border-2 border-dashed"
                                 style="border-color:rgba(201,168,76,0.5);background:linear-gradient(135deg,rgba(201,168,76,0.04),rgba(75,0,130,0.04));">
                                 <div class="flex items-center gap-4">
-                                    {{-- Decrement --}}
-                                    <button type="button" id="decrement"
-                                        class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xl transition-all hover:bg-opacity-20"
-                                        style="background:rgba(75,0,130,0.08);color:#4B0082;"
-                                        onclick="changeCount(-1)">−</button>
 
                                     <div class="flex-1 text-center">
                                         {{-- Input field instead of Div --}}
@@ -237,12 +232,6 @@
                                         <p class="text-xs text-gray-400 mt-1 font-medium tracking-wide uppercase">souls
                                             committed</p>
                                     </div>
-
-                                    {{-- Increment --}}
-                                    <button type="button" id="increment"
-                                        class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-xl transition-all hover:bg-opacity-20"
-                                        style="background:rgba(75,0,130,0.08);color:#4B0082;"
-                                        onclick="changeCount(1)">+</button>
                                 </div>
                             </div>
                         </div>
