@@ -69,8 +69,9 @@
 
                         {{-- Layer 1: The User's Uploaded Photo --}}
                         <div id="photo-wrapper" class="absolute inset-0 flex items-center justify-center" style="z-index: 1;">
-                            <img id="user-photo-preview" class="hidden object-cover rounded-full"
-                                style="width: 53%; aspect-ratio: 1; transform: translate(0px, -7%) scale(1);" alt="User photo">
+                           <img id="user-photo-preview" class="hidden object-cover rounded-full"
+                            style="width: 50%; aspect-ratio: 1; transform: translate(0px, 2%) scale(0.95);"
+                            alt="User photo">
                         </div>
 
                         {{-- Layer 2: The Actual Frame Image --}}

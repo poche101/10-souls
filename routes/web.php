@@ -19,7 +19,9 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 Route::post('/admin/logout',[AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // ── Protected dashboard routes ──────────────────────────────────────────────
-Route::middleware(\App\Http\Middleware\AdminAuthenticated::class)->group(function () {
+// ── Protected dashboard routes ──────────────────────────────────────────────
+// Use the 'admin' alias defined in bootstrap/app.php
+Route::middleware(['admin'])->group(function () {
     Route::get('/dashboard',        [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/export', [DashboardController::class, 'export'])->name('dashboard.export');
 });
