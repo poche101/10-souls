@@ -92,4 +92,17 @@ class DashboardController extends Controller
             'Content-Disposition' => 'attachment; filename="10souls10days_registrations_' . now()->format('Ymd_His') . '.csv"',
         ]);
     }
+
+    // Add this to your DashboardController.php
+
+public function logout(Request $request)
+{
+    // Clear the specific admin session
+    $request->session()->forget('admin_logged_in');
+
+    // Optional: Clear all session data for security
+    // $request->session()->flush();
+
+    return redirect()->route('admin.login')->with('success', 'You have been logged out.');
+}
 }

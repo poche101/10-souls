@@ -16,7 +16,6 @@ Route::get('/avatar/{registration}/download', [RegistrationController::class, 'a
 // ── Admin auth routes (public) ──────────────────────────────────────────────
 Route::get('/admin/login',  [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
-Route::post('/admin/logout',[AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // ── Protected dashboard routes ──────────────────────────────────────────────
 // ── Protected dashboard routes ──────────────────────────────────────────────
@@ -24,4 +23,5 @@ Route::post('/admin/logout',[AdminAuthController::class, 'logout'])->name('admin
 Route::middleware(['admin'])->group(function () {
     Route::get('/dashboard',        [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/export', [DashboardController::class, 'export'])->name('dashboard.export');
-});
+    Route::get('/logout', [DashboardController::class, 'logout'])->name('logout');
+    });
