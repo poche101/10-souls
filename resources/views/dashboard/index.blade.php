@@ -425,12 +425,12 @@
             </a>
 
              <a href="{{ route('logout') }}"
-   class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 flex items-center gap-2">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-    </svg>
-    Logout
-</a>
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition duration-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+            </a>
         </div>
     </div>
 
@@ -522,127 +522,142 @@
                 </div>
 
                 <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:40px;">#</th>
-                                <th>
-                                    <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'full_name','dir'=>($sortBy==='full_name'&&$sortDir==='asc'?'desc':'asc')])) }}">
-                                        Registrant
-                                        @if($sortBy==='full_name') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
-                                    </a>
-                                </th>
-                                <th>Phone</th>
-                                <th>Cell</th>
-                                <th>
-                                    <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'church','dir'=>($sortBy==='church'&&$sortDir==='asc'?'desc':'asc')])) }}">
-                                        Church
-                                        @if($sortBy==='church') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
-                                    </a>
-                                </th>
-                                <th>
-                                    <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'group','dir'=>($sortBy==='group'&&$sortDir==='asc'?'desc':'asc')])) }}">
-                                        Group
-                                        @if($sortBy==='group') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
-                                    </a>
-                                </th>
-                                <th>
-                                    <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'souls_commitment','dir'=>($sortBy==='souls_commitment'&&$sortDir==='asc'?'desc':'asc')])) }}">
-                                        Souls
-                                        @if($sortBy==='souls_commitment') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
-                                    </a>
-                                </th>
-                                <th>Avatar</th>
-                                <th>
-                                    <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'created_at','dir'=>($sortBy==='created_at'&&$sortDir==='asc'?'desc':'asc')])) }}">
-                                        Registered
-                                        @if($sortBy==='created_at') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
-                                    </a>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($registrations as $i => $reg)
-                            @php
-                                $colors = [
-                                    ['#EDE9FE','#5B21B6'],['#FEF3C7','#92400E'],['#D1FAE5','#065F46'],
-                                    ['#FCE7F3','#9D174D'],['#DBEAFE','#1E40AF'],['#FEE2E2','#991B1B'],
-                                ];
-                                $c = $colors[$reg->id % count($colors)];
-                                $initials = collect(explode(' ', $reg->full_name))->take(2)->map(fn($w)=>strtoupper($w[0]))->implode('');
-                            @endphp
-                            <tr>
-                                <td style="color:var(--muted);font-size:12px;font-weight:600;">
-                                    {{ $registrations->firstItem() + $i }}
-                                </td>
-                                <td>
-                                    <div style="display:flex;align-items:center;gap:10px;">
-                                        @if($reg->avatar_path)
-                                            <img src="{{ asset('storage/'.$reg->avatar_path) }}"
-                                                 style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(201,168,76,0.4);"
-                                                 alt="{{ $reg->full_name }}"/>
-                                        @else
-                                            <div class="avatar-circle" style="background:{{ $c[0] }};color:{{ $c[1] }};">
-                                                {{ $initials }}
-                                            </div>
-                                        @endif
-                                        <div>
-                                            <div style="font-weight:600;font-size:14px;color:var(--ink);">{{ $reg->full_name }}</div>
-                                            <span class="badge badge-title">{{ $reg->title }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="color:var(--muted);font-size:13px;">{{ $reg->phone_number }}</td>
-                                <td style="font-size:13px;">{{ $reg->cell }}</td>
-                                <td>
-                                    <div style="font-size:13px;font-weight:500;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ $reg->church }}">
-                                        {{ $reg->church }}
-                                    </div>
-                                </td>
-                                <td style="font-size:13px;color:var(--muted);">{{ $reg->group }}</td>
-                                <td>
-                                    @php $maxSouls = $registrations->max('souls_commitment') ?: 1; @endphp
-                                    <div class="souls-bar">
-                                        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--gold);min-width:24px;">{{ $reg->souls_commitment }}</span>
-                                        <div class="souls-track">
-                                            <div class="souls-fill" style="width:{{ min(100, ($reg->souls_commitment / $maxSouls) * 100) }}%;"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    @if($reg->avatar_path)
-                                        <a href="{{ route('avatar.download', $reg->id) }}"
-                                           style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#15803D;text-decoration:none;background:rgba(21,128,61,0.08);padding:4px 10px;border-radius:6px;"
-                                           title="Download avatar">
-                                            <svg style="width:13px;height:13px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
-                                            Done
-                                        </a>
-                                    @else
-                                        <a href="{{ route('avatar.show', $reg->id) }}"
-                                           style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#C9A84C;text-decoration:none;background:rgba(201,168,76,0.08);padding:4px 10px;border-radius:6px;">
-                                            <svg style="width:13px;height:13px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25M12 3v13.5m0 0l-4.5-4.5M12 16.5l4.5-4.5"/></svg>
-                                            Upload
-                                        </a>
-                                    @endif
-                                </td>
-                                <td style="font-size:12px;color:var(--muted);white-space:nowrap;">
-                                    {{ $reg->created_at->format('M d, Y') }}<br/>
-                                    <span style="font-size:11px;">{{ $reg->created_at->format('g:i A') }}</span>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="9">
-                                    <div class="empty-state">
-                                        <svg style="width:48px;height:48px;color:rgba(59,0,112,0.15);margin:0 auto 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
-                                        <p style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--royal);margin-bottom:6px;">No registrations found</p>
-                                        <p style="font-size:13px;">{{ $search ? 'Try a different search term.' : 'No one has registered yet.' }}</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                   <table>
+    <thead>
+        <tr>
+            <th style="width:40px;">#</th>
+            <th>
+                <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'full_name','dir'=>($sortBy==='full_name'&&$sortDir==='asc'?'desc':'asc')])) }}">
+                    Registrant
+                    @if($sortBy==='full_name') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
+                </a>
+            </th>
+            <th>Phone</th>
+            <th>Cell</th>
+            <th>
+                <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'church','dir'=>($sortBy==='church'&&$sortDir==='asc'?'desc':'asc')])) }}">
+                    Church
+                    @if($sortBy==='church') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'group','dir'=>($sortBy==='group'&&$sortDir==='asc'?'desc':'asc')])) }}">
+                    Group
+                    @if($sortBy==='group') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'souls_commitment','dir'=>($sortBy==='souls_commitment'&&$sortDir==='asc'?'desc':'asc')])) }}">
+                    Souls
+                    @if($sortBy==='souls_commitment') <span>{{ $sortDir==='asc' ? '↑' : '↓' }}</span> @endif
+                </a>
+            </th>
+            <th>Avatar</th>
+            <th>
+                <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'kingschat_handle','dir'=>($sortBy==='kingschat_handle'&&$sortDir==='asc'?'desc':'asc')])) }}">
+                    KC Handle
+                    @if($sortBy === 'kingschat_handle')
+                        <span>{{ $sortDir === 'asc' ? '↑' : '↓' }}</span>
+                    @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('dashboard', array_merge(request()->query(), ['sort'=>'created_at','dir'=>($sortBy==='created_at'&&$sortDir==='asc'?'desc':'asc')])) }}">
+                    Registered
+                    @if($sortBy === 'created_at')
+                        <span>{{ $sortDir === 'asc' ? '↑' : '↓' }}</span>
+                    @endif
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($registrations as $i => $reg)
+        @php
+            $colors = [
+                ['#EDE9FE','#5B21B6'],['#FEF3C7','#92400E'],['#D1FAE5','#065F46'],
+                ['#FCE7F3','#9D174D'],['#DBEAFE','#1E40AF'],['#FEE2E2','#991B1B'],
+            ];
+            $c = $colors[$reg->id % count($colors)];
+            $initials = collect(explode(' ', $reg->full_name))->take(2)->map(fn($w)=>strtoupper($w[0]))->implode('');
+        @endphp
+        <tr>
+            <td style="color:var(--muted);font-size:12px;font-weight:600;">
+                {{ $registrations->firstItem() + $i }}
+            </td>
+            <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    @if($reg->avatar_path)
+                        <img src="{{ asset('storage/'.$reg->avatar_path) }}"
+                             style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(201,168,76,0.4);"
+                             alt="{{ $reg->full_name }}"/>
+                    @else
+                        <div class="avatar-circle" style="background:{{ $c[0] }};color:{{ $c[1] }};">
+                            {{ $initials }}
+                        </div>
+                    @endif
+                    <div>
+                        <div style="font-weight:600;font-size:14px;color:var(--ink);">{{ $reg->full_name }}</div>
+                        <span class="badge badge-title">{{ $reg->title }}</span>
+                    </div>
+                </div>
+            </td>
+            <td style="color:var(--muted);font-size:13px;">{{ $reg->phone_number }}</td>
+            <td style="font-size:13px;">{{ $reg->cell }}</td>
+            <td>
+                <div style="font-size:13px;font-weight:500;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ $reg->church }}">
+                    {{ $reg->church }}
+                </div>
+            </td>
+            <td style="font-size:13px;color:var(--muted);">{{ $reg->group }}</td>
+            <td>
+                @php $maxSouls = $registrations->max('souls_commitment') ?: 1; @endphp
+                <div class="souls-bar">
+                    <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--gold);min-width:24px;">{{ $reg->souls_commitment }}</span>
+                    <div class="souls-track">
+                        <div class="souls-fill" style="width:{{ min(100, ($reg->souls_commitment / $maxSouls) * 100) }}%;"></div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                @if($reg->avatar_path)
+                    <a href="{{ route('avatar.download', $reg->id) }}"
+                       style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#15803D;text-decoration:none;background:rgba(21,128,61,0.08);padding:4px 10px;border-radius:6px;"
+                       title="Download avatar">
+                        <svg style="width:13px;height:13px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                        Done
+                    </a>
+                @else
+                    <a href="{{ route('avatar.show', $reg->id) }}"
+                       style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#C9A84C;text-decoration:none;background:rgba(201,168,76,0.08);padding:4px 10px;border-radius:6px;">
+                        <svg style="width:13px;height:13px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25M12 3v13.5m0 0l-4.5-4.5M12 16.5l4.5-4.5"/></svg>
+                        Upload
+                    </a>
+                @endif
+            </td>
+            {{-- Added the missing KC Handle cell here --}}
+            <td style="font-size:13px; font-weight:500; color:var(--ink);">
+                {{ $reg->kingschat_handle ?? '—' }}
+            </td>
+            <td style="font-size:12px;color:var(--muted);white-space:nowrap;">
+                {{ $reg->created_at->format('M d, Y') }}<br/>
+                <span style="font-size:11px;">{{ $reg->created_at->format('g:i A') }}</span>
+            </td>
+        </tr>
+        @empty
+        <tr>
+            {{-- Updated colspan to 10 to match the new total number of columns --}}
+            <td colspan="10">
+                <div class="empty-state">
+                    <svg style="width:48px;height:48px;color:rgba(59,0,112,0.15);margin:0 auto 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+                    <p style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--royal);margin-bottom:6px;">No registrations found</p>
+                    <p style="font-size:13px;">{{ $search ? 'Try a different search term.' : 'No one has registered yet.' }}</p>
+                </div>
+            </td>
+        </tr>
+        @endforelse
+    </tbody>
+</table>
                 </div>
 
                 {{-- Pagination --}}

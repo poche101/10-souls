@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $sortBy = $request->get('sort', 'created_at');
         $sortDir = $request->get('dir', 'desc');
 
-        $allowedSorts = ['full_name', 'church', 'group', 'souls_commitment', 'created_at'];
+        $allowedSorts = ['full_name', 'church', 'group', 'kingschat_handle', 'souls_commitment', 'created_at'];
         if (!in_array($sortBy, $allowedSorts)) {
             $sortBy = 'created_at';
         }
@@ -27,6 +27,7 @@ class DashboardController extends Controller
                   ->orWhere('phone_number', 'like', "%{$search}%")
                   ->orWhere('church', 'like', "%{$search}%")
                   ->orWhere('group', 'like', "%{$search}%")
+                  ->orWhere('kingschat_handle', 'like', "%{$search}%")
                   ->orWhere('cell', 'like', "%{$search}%");
             });
         }
@@ -40,7 +41,8 @@ class DashboardController extends Controller
         $totalRegistered   = Registration::count();
         $totalSoulsComitted = Registration::sum('souls_commitment');
         $totalChurches     = Registration::distinct('church')->count('church');
-        $totalGroups       = Registration::distinct('group')->count('group');
+        $totalGroups = Registration::distinct('group')->count('group');
+        $totalKC     = Registration::distinct('kingschat_handle')->count(); // Use a new variable
         $todayRegistrations = Registration::whereDate('created_at', today())->count();
         $withAvatars       = Registration::whereNotNull('avatar_path')->count();
 
@@ -81,6 +83,7 @@ class DashboardController extends Controller
                 '"' . $r->cell . '"',
                 '"' . $r->church . '"',
                 '"' . $r->group . '"',
+                '"' . $r->kingschat_handle . '"',
                 $r->souls_commitment,
                 $r->avatar_path ? 'Yes' : 'No',
                 $r->created_at->format('Y-m-d H:i:s'),

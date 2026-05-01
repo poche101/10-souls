@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('cell');
             $table->string('church');
             $table->string('group');
+            $table->string('kingschat_handle')->nullable();
             $table->integer('souls_commitment');
             $table->string('avatar_path')->nullable();
             $table->timestamps();

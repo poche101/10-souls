@@ -13,6 +13,7 @@ class Registration extends Model
         'cell',
         'church',
         'group',
+        'kingschat_handle',
         'souls_commitment',
         'avatar_path',
     ];

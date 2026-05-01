@@ -34,6 +34,7 @@ class RegistrationController extends Controller
             'cell'             => ['required', 'string', 'max:100'],
             'church'           => ['required', 'string', 'max:255'],
             'group'            => ['required', 'string', 'max:100'],
+            'kingschat_handle' => [ 'string', 'max:100'],
             'souls_commitment' => ['required', 'integer', 'min:1'],
         ]);
 

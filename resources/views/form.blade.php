@@ -99,7 +99,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('register.store') }}" method="POST" class="space-y-5">
+                   <form action="{{ route('register.store') }}" method="POST" class="space-y-5">
                         @csrf
 
                         {{-- Row: Title --}}
@@ -143,6 +143,21 @@
                                 </svg>
                                 <input type="text" name="full_name" class="input-field" placeholder="e.g. John Adeyemi"
                                     value="{{ old('full_name') }}" required />
+                            </div>
+                        </div>
+
+                        {{-- KingsChat Handle --}}
+                        <div class="fade-in delay-2">
+                            <label class="block text-sm font-semibold mb-2" style="color:#2D0050;">
+                                KingsChat Handle <span class="text-red-400"></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <img src="images/kchat.png" alt="KingsChat"
+                                    class="input-icon"
+                                    style="width:45px; height:45px; object-fit:contain;" />
+                                <input type="text" name="kingschat_handle" class="input-field"
+                                    placeholder="e.g. @JohnAdeyemi"
+                                    value="{{ old('kingschat_handle') }}" />
                             </div>
                         </div>
 
@@ -235,6 +250,7 @@
                                 </div>
                             </div>
                         </div>
+
                         {{-- Submit --}}
                         <div class="pt-4 fade-in delay-6">
                             <button type="submit" class="btn-gold w-full flex items-center justify-center gap-3">
